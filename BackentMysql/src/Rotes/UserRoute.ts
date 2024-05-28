@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { SignUp } from "../Collections/UserCollection";
+import { Login, SignUp } from "../Collections/UserCollection";
 
-
+ 
 const express = require('express')
 const router:Router = express.Router()
 
 router.post('/signup',SignUp)
+router.post('/login',Login)
 
 module.exports = router; 
