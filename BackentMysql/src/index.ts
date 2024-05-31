@@ -7,6 +7,7 @@ import cors from "cors"
 import env from "dotenv"
 const mySqlPool = require('./Config/Db');
 const router = require('./Rotes/UserRoute')
+const router2 = require('./Rotes/CategoryRouter')
 
 const app = express()
  
@@ -31,3 +32,4 @@ mySqlPool.query('SELECT 1').then(()=>{
 }) 
 
 app.use('/user',router)
+app.use('/admin',router2)

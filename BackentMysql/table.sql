@@ -11,4 +11,10 @@ create table users (
 
 insert into users(
     name,contactNumber,email,password,status,role
-    )values('Admin','1234567890','admin@gmail.com','admin','true','admin');
+    )values('Admin','1234567890','admin@gmail.com','admin','true','admin');            
+
+create table category (
+    id into not null AUTO_INCREMENT,
+    name varchar(255) not null,
+    primary mey(id)
+);

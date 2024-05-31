@@ -75,3 +75,112 @@ export const Login = async (req: express.Request, res: express.Response) => {
         })
     }
 }
+
+export const AllUser = async (req: express.Request, res: express.Response) => {
+    try {
+        var query1 = "SELECT id,name,email,contactNumber,status FROM users WHERE role ='user' ";
+        const users = await db.query(query1);
+        if (users) {
+            res.send({
+                success: true,
+                message: "user found Succes",
+                data: users[0]
+            })
+        } else {
+            res.send({
+                success: false,
+                message: "user not found"
+            })
+        }
+    } catch (error) {
+        res.send({
+            success: false,
+            message: "Server Error"
+        })
+    }
+}
+
+export const UpdateUserStatus = async (req: express.Request, res: express.Response) => {
+    const { status, id } = req.body
+    try {
+        var query1 = "UPDATE users SET status=? WHERE id=?";
+        const user = await db.query(query1, [status, id])
+        if (user) {
+            res.send({
+                success: true,
+                message: "Update Success"
+            })
+        }
+    } catch (error) {
+        res.send({
+            success: false,
+            message: "server error"
+        })
+    }
+
+}
+
+export const ChangePass = async (req: express.Request, res: express.Response) => {
+    const { email, oldPassword, newPassword } = req['body']
+    try {
+        let query1 = 'select email,password,role,status from users WHERE email=?'
+        const user = await db.query(query1, [email])
+        const b = user[0]
+        if (b[0]) {
+            if (b[0].password === oldPassword) {
+                const query2 = "UPDATE users SET password=? WHERE email=?";
+                const u = await db.query(query2, [newPassword, email])
+                if (u[0]) {
+                    res.send({
+                        success: true,
+                        message: "Password updation success"
+                    })
+                } else {
+                    res.send({
+                        success: false,
+                        message: "error"
+                    })
+                }
+            } else {
+                res.send({
+                    success: false,
+                    message: "Wrong Password"
+                })
+            }
+        } else {
+            res.send({
+                success: false,
+                message: "Email wrong"
+            })
+        }
+    } catch (error) {
+        res.send({
+            success: false,
+            message: "Server error"
+        })
+    }
+}
+
+export const addCatogery = async (req: express.Request, res: express.Response) => {
+    const { name } = req.body
+    try {
+        const query1 = 'insert into category (name) values(?)';
+        const cat = await db.query(query1, [name])
+        if (cat[0]) {
+            res.send({
+                success: true,
+                message: "Category added success"
+            })
+        } else {
+            res.send({
+                success: false,
+                message: "Category added errror"
+            })
+        }
+    } catch (error) {
+        res.send({
+            success: false,
+            message: "SERver Error"
+        })
+    }
+}
