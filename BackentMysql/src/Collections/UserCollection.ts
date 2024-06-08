@@ -164,17 +164,87 @@ export const ChangePass = async (req: express.Request, res: express.Response) =>
 export const addCatogery = async (req: express.Request, res: express.Response) => {
     const { name } = req.body
     try {
-        const query1 = 'insert into category (name) values(?)';
-        const cat = await db.query(query1, [name])
-        if (cat[0]) {
+        const query1 = 'select name,id from category WHERE name=?';
+        const data = await db.query(query1, [name])
+        const a = data[0]
+        if (a[0]) {
+            if (a[0].name === name) {
+                res.send({
+                    success: false,
+                    message: "Catogory already added"
+                })
+            } else {
+                res.send({
+                    success: false,
+                    message: "Data not found"
+                })
+            }
+        } else {
+            const query2 = 'insert into category (name) values(?)';
+            const cat = await db.query(query2, [name])
+            if (cat[0]) {
+                res.send({
+                    success: true,
+                    message: "Category added success"
+                })
+            } else {
+                res.send({
+                    success: false,
+                    message: "Somting went Error"
+                })
+            }
+        }
+    } catch (error) {
+        res.send({
+            success: false,
+            message: "SERver Error"
+        })
+    }
+}
+
+export const getCatogery = async (req: express.Request, res: express.Response) => {
+    try {
+        const query1 = 'select * from  category order by name';
+        const data = await db.query(query1)
+        if (data[0]) {
             res.send({
                 success: true,
-                message: "Category added success"
+                message: "data find success",
+                data: data[0]
             })
         } else {
             res.send({
                 success: false,
-                message: "Category added errror"
+                message: "found error"
+            })
+        }
+    } catch (error) {
+        res.send({
+            success: false,
+            message: "SERver Error"
+        })
+    }
+}
+
+
+export const updatCatogery = async (req: express.Request, res: express.Response) => {
+    const { name, id } = req.body
+    try {
+        const query1 = 'select name,id from category WHERE id=?';
+        const data = await db.query(query1, [id])
+        const a = data[0]
+        if (a[0]) {
+            const query1 = 'update category set name=? where id=?'
+            const data = await db.query(query1, [name, id])
+            res.send({
+                success: true,
+                message: "Update successfully",
+                data: data
+            })
+        } else {
+            res.send({
+                success: false,
+                message: "Data is not found"
             })
         }
     } catch (error) {
