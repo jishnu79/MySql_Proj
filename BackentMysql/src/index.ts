@@ -7,7 +7,7 @@ import cors from "cors"
 import env from "dotenv"
 const mySqlPool = require('./Config/Db');
 const router = require('./Rotes/UserRoute')
-const router2 = require('./Rotes/CategoryRouter')
+const router2 = require('./Rotes/AdminRoute')
 
 const app = express()
  
